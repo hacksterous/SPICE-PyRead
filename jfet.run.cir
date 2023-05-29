@@ -1,0 +1,25 @@
+* JFET DC Transfer Function
+
+* Include the JFET model
+.model J1N5457 NJF(IS=2E-10 VTO=-2.5 BETA=10.6E-3)
+
+* Circuit definition
+VGATE IN GND dc 2
+RD1 OUT DRAIN 100
+JQ1 DRAIN GATE GND J1N5457
+RG1 GATE IN 10
+
+VDRAIN OUT GND dc 1
+
+.control
+	* DC sweep setup
+	* set filetype=ascii
+	dc VDRAIN 0 10 0.1 VGATE -5 2 0.2
+	run
+	*plot i(vdrain) vs v(DRAIN)
+	*plot -VDRAIN#branch vs V(DRAIN)
+	reshape all [36][101]
+	write jfet.bin.raw 
+.endc
+.end
+
